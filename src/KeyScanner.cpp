@@ -6,23 +6,27 @@ MatrixKeyPad::MatrixKeyPad(uint8_t *colume, uint8_t *row, uint8_t columns, uint8
 	this->rowPins = row;
 	this->columns = columns;
 	this->rows = rows;
+
+
+	for (byte r=0; r<rows; r++) {
+		pinMode(rowPins[r],INPUT_PULLUP);
+	}
+
+	for (byte i = 0; i < columns; i++)
+	{
+		pinMode(columnPins[i], OUTPUT);
+		digitalWrite(columnPins[i],LOW);
+	}
+	
 }
 
 void MatrixKeyPad::scanner() {
-
-	for (byte r=0; r<rows; r++) {
-		pinMode(rowPins[r],INPUT_PULLDOWN);
-	}
-
 	// Serial.println("------");
 	for (byte c=0; c<columns; c++) {
-		pinMode(columnPins[c],OUTPUT);
 		digitalWrite(columnPins[c], HIGH);
 		for (byte r=0; r<rows; r++) {
 			lastStatus[r][c][0] = digitalRead(rowPins[r]);
-			// Serial.printf("%d ", digitalRead(rowPins[r]));
 		}
-		// Serial.println();
 		digitalWrite(columnPins[c],LOW);
 	}
 }

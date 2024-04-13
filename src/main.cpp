@@ -1,4 +1,4 @@
-#include <BleKeyboard.h>
+// #include <BleKeyboard.h>
 #include <Arduino.h>
 #include <FastLED.h>
 
@@ -46,7 +46,7 @@ Layer keyMap[2] = {
     }};
 
 Layer *currLayer = &keyMap[0];
-BleKeyboard bleKeyboard;
+// BleKeyboard bleKeyboard;
 MatrixKeyPad matrixKeyPad = MatrixKeyPad(columnPins, rowPins, COLUMNS, ROWS);
 CRGB leds[NUM_PIXELS] = {0};
 
@@ -60,25 +60,25 @@ unsigned long lastTime = 0;
 
 void eventListener(KeyEvent event)
 {
-  Serial.printf("Key Pad Update %u:%u -> %d \n", event.colume, event.row, event.pess);
-  if (!bleKeyboard.isConnected())
-    return;
+  Serial.printf("Key Pad Update %u:%u -> %d\n\r", event.row, event.colume, event.pess);
+  // if (!bleKeyboard.isConnected())
+  //   return;
   CustomKey key = (*currLayer)[event.row][event.colume];
 
   switch (key.type)
   {
   case KeyType::KEYBOARD_KEY:
-    if (event.pess)
-      bleKeyboard.press(*((uint8_t *)key.arg));
-    else
-      bleKeyboard.release(*((uint8_t *)key.arg));
+    // if (event.pess)
+    //   bleKeyboard.press(*((uint8_t *)key.arg));
+    // else
+    //   bleKeyboard.release(*((uint8_t *)key.arg));
     break;
 
   case KeyType::MEDIA_KEY:
-    if (event.pess)
-      bleKeyboard.press((uint8_t *)key.arg);
-    else
-      bleKeyboard.release((uint8_t *)key.arg);
+    // if (event.pess)
+    //   bleKeyboard.press((uint8_t *)key.arg);
+    // else
+    //   bleKeyboard.release((uint8_t *)key.arg);
     break;
 
   case KeyType::LAYER_KEY:
@@ -105,19 +105,20 @@ void rgbHandel()
 void setup()
 {
   Serial.begin(115200);
-  bleKeyboard.setName(KEYBOARD_NAME);
-  bleKeyboard.begin();
+  // bleKeyboard.setName(KEYBOARD_NAME);
+  // bleKeyboard.begin();
   matrixKeyPad.addEventListener(eventListener);
-  // FastLED.addLeds<WS2812, PIN_WS2812>(leds, NUM_PIXELS);
+  FastLED.addLeds<WS2812, PIN_WS2812>(leds, NUM_PIXELS);
   delay(1000);
+  Serial.println("Keyboard start");
 }
 
 void loop()
 {
   matrixKeyPad.update();
 
-  // if (millis() - lastTime > 500) {
-  //     // rgbHandel();
-  //     lastTime = millis();
-  // }
+  if (millis() - lastTime > 500) {
+      rgbHandel();
+      lastTime = millis();
+  }
 }

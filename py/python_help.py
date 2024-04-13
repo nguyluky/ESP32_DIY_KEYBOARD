@@ -1,8 +1,10 @@
 import json
 
 
-def makeButtonLayer():
-    with open('/home/luky/Downloads/keyboard-layout-converted.json', encoding="UTF-8") as file:
+LAYER_FILE_PATH = "./wokwi/keyboard-layout-converted.json"
+
+def makeButtonLayout():
+    with open(LAYER_FILE_PATH, encoding="UTF-8") as file:
         data = json.load(file)
 
         print(len(data["keys"]))
@@ -29,8 +31,8 @@ def makeButtonLayer():
             # s[index] = value["x"] + value['width'] / 2
 
 
-def makeLedLayer():
-    with open('/home/luky/Downloads/keyboard-layout-converted.json', encoding="UTF-8") as file:
+def makeLedLayout():
+    with open(LAYER_FILE_PATH, encoding="UTF-8") as file:
         data = json.load(file)
 
         print(len(data["keys"]))
@@ -38,8 +40,8 @@ def makeLedLayer():
             new_data = {
             "type": "wokwi-neopixel",
             "id": f"rgb{index}",
-            "left": (value["x"] + value['width'] / 2) * 20 ,
-            "top": (value['y'] + value['height'] / 2) * 20,
+            "left": (value["x"] + value['width'] / 2) * 75 + 24.5,
+            "top": (value['y'] + value['height'] / 2) * 75 + 40,
             "rotate": 180,
             "attrs": {}
             }
@@ -48,7 +50,7 @@ def makeLedLayer():
 
 
 def makeLedHub():
-    with open('/home/luky/Downloads/keyboard-layout-converted.json', encoding="UTF-8") as file:
+    with open(LAYER_FILE_PATH, encoding="UTF-8") as file:
         data = json.load(file)
 
         print(len(data["keys"]))
@@ -64,9 +66,9 @@ def makeLedHub():
             print(round(i * 255 / max_), ',')
 
 
-def makeConntentLed():
+def makeLedConntent():
     for i in range(85):
-        connection = [ f"rgb{i}:DOUT", f"rgb{i+1}:DIN", "green"]
+        connection = [ f"rgb{i}:DOUT", f"rgb{i+1}:DIN", "yellow"]
         print(json.dumps(connection), ',')
 
 def formatCenterMap():
@@ -85,5 +87,6 @@ KC::LCTRL    , KC::LGUI  , KC::LALT  , KC::SPACE  , KC::RALT, KC::LM(1) , KC::PR
         print("{",line,"},")
 
 if __name__ == "__main__":
-    formatCenterMap()
+    # formatCenterMap()
+    makeLedConntent()
     pass

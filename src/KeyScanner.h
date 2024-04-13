@@ -12,6 +12,9 @@ struct KeyEvent
 class MatrixKeyPad
 {
 private:
+    virtual void pin_mode(byte pinNum, byte mode) { pinMode(pinNum, mode); }
+	virtual void pin_write(byte pinNum, boolean level) { digitalWrite(pinNum, level); }
+	virtual int  pin_read(byte pinNum) { return digitalRead(pinNum); }
     void (*eventListener)(KeyEvent);
     bool lastStatus[ROWS][COLUMNS][2] = {};
     uint8_t *columnPins;

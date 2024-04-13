@@ -14,6 +14,6 @@
 #define LAYERS 2
 
 #define NUM_PIXELS 87
-#define PIN_WS2812 GPIO_NUM_16
+#define PIN_WS2812 GPIO_NUM_15
 
 #endif
