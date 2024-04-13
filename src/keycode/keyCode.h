@@ -2,26 +2,8 @@
 #define CUSTOM_KEY_CODE
 
 #include <Arduino.h>
-#include "config.h"
 #include "useHidKey.h"
-#include "Layer.h"
-
-enum KeyType {
-    MOUSE_KEY,
-    KEYBOARD_KEY,
-    MEDIA_KEY,
-    LAYER_KEY,
-    LED_KEY,
-
-};
-
-struct CustomKey
-{
-    KeyType type;
-    void *arg;
-};
-
-typedef CustomKey Layer[COLUMNS][ROWS];
+#include "../structure.h"
 
 namespace KC
 {

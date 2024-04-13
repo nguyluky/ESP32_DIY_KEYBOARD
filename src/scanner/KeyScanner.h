@@ -2,7 +2,7 @@
 #ifndef KEYS_CANNER
 #define KEYS_CANNER
 #include <Arduino.h>
-#include "config.h"
+#include "../config.h"
 struct KeyEvent
 {
     byte colume, row;

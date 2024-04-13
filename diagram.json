@@ -1588,6 +1588,7 @@
     [ "rgb82:DOUT", "rgb83:DIN", "yellow", [] ],
     [ "rgb83:DOUT", "rgb84:DIN", "yellow", [] ],
     [ "rgb84:DOUT", "rgb85:DIN", "yellow", [] ],
+    [ "rgb85:DOUT", "rgb86:DIN", "yellow", [] ],
     [ "rgb0:DIN", "esp:15", "yellow", [ "h-4.4", "v3", "h-153.6", "v163.2" ] ],
     [ "esp:19", "btn0:2.l", "green", [ "h9.6", "v-19.2" ] ],
     [ "esp:18", "btn16:2.l", "green", [ "h0" ] ],
