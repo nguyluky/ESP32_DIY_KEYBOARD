@@ -1,0 +1,8 @@
+{
+    "cmake.configureOnOpen": true,
+    "cmake.sourceDirectory": "/home/luky/code/esp32/bluKeyboard/.pio/libdeps/esp32cam/Unity",
+    "files.associations": {
+        "*.tcc": "cpp",
+        "algorithm": "cpp"
+    }
+}
