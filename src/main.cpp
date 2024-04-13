@@ -41,8 +41,12 @@ Layer keyMap[2] = {
      {KC::CAPSLOCK, KC::A, KC::S, KC::D, KC::F, KC::G, KC::H, KC::J, KC::K, KC::L, KC::SCLN, KC::QUOT, KC::ENTER, KC::PAGEDOWN, KC::NONE},
      {KC::LSHIFT, KC::Z, KC::X, KC::C, KC::V, KC::B, KC::N, KC::M, KC::COMMA, KC::DOT, KC::SLASH, KC::RSHIFT, KC::END, KC::PAGEUP, KC::NONE},
      {KC::LCTRL, KC::LGUI, KC::LALT, KC::SPACE, KC::RALT, KC::LM(1), KC::PROPS, KC::RCTRL, KC::LEFT, KC::DOWN, KC::RIGHT, KC::UP, KC::HOME, KC::PAUSE, KC::NONE}},
-    {
-
+    {{KC::NONE, KC::NONE, KC::NONE, KC::NONE, KC::NONE, KC::NONE, KC::NONE, KC::NONE, KC::NONE, KC::NONE, KC::NONE, KC::NONE, KC::NONE, KC::NONE, KC::NONE},
+     {KC::NONE, KC::NONE, KC::NONE, KC::NONE, KC::NONE, KC::NONE, KC::NONE, KC::NONE, KC::NONE, KC::NONE, KC::NONE, KC::NONE, KC::NONE, KC::NONE, KC::NONE},
+     {KC::NONE, KC::NONE, KC::NONE, KC::NONE, KC::NONE, KC::NONE, KC::NONE, KC::NONE, KC::NONE, KC::NONE, KC::NONE, KC::NONE, KC::NONE, KC::NONE, KC::NONE},
+     {KC::NONE, KC::NONE, KC::NONE, KC::NONE, KC::NONE, KC::NONE, KC::NONE, KC::NONE, KC::NONE, KC::NONE, KC::NONE, KC::NONE, KC::NONE, KC::NONE, KC::NONE},
+     {KC::NONE, KC::NONE, KC::NONE, KC::NONE, KC::NONE, KC::NONE, KC::NONE, KC::NONE, KC::NONE, KC::NONE, KC::NONE, KC::NONE, KC::NONE, KC::NONE, KC::NONE},
+     {KC::NONE, KC::NONE, KC::NONE, KC::NONE, KC::NONE, KC::LM(0), KC::NONE, KC::NONE, KC::NONE, KC::NONE, KC::NONE, KC::NONE, KC::NONE, KC::NONE, KC::NONE}
     }};
 
 Layer *currLayer = &keyMap[0];
@@ -64,7 +68,10 @@ void eventListener(KeyEvent event)
   // if (!bleKeyboard.isConnected())
   //   return;
   CustomKey key = (*currLayer)[event.row][event.colume];
-
+  if (key.arg == NULL) {
+    Serial.println("|-- key none");
+    return;
+  }
   switch (key.type)
   {
   case KeyType::KEYBOARD_KEY:
@@ -98,7 +105,7 @@ void rgbHandel()
     culumn = ledMap[i];
     leds[i] = CHSV(culumn + hubOffset, 255, 255);
   }
-  hubOffset++;
+  hubOffset+=20;
   FastLED.show();
 }
 
@@ -117,7 +124,7 @@ void loop()
 {
   matrixKeyPad.update();
 
-  if (millis() - lastTime > 500) {
+  if (millis() - lastTime > 100) {
       rgbHandel();
       lastTime = millis();
   }

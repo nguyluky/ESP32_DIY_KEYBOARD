@@ -9,13 +9,13 @@ MatrixKeyPad::MatrixKeyPad(uint8_t *colume, uint8_t *row, uint8_t columns, uint8
 
 
 	for (byte r=0; r<rows; r++) {
-		pinMode(rowPins[r],INPUT_PULLUP);
+		pinMode(rowPins[r],INPUT_PULLDOWN);
 	}
 
 	for (byte i = 0; i < columns; i++)
 	{
 		pinMode(columnPins[i], OUTPUT);
-		digitalWrite(columnPins[i],LOW);
+		digitalWrite(columnPins[i], LOW);
 	}
 	
 }
@@ -27,7 +27,7 @@ void MatrixKeyPad::scanner() {
 		for (byte r=0; r<rows; r++) {
 			lastStatus[r][c][0] = digitalRead(rowPins[r]);
 		}
-		digitalWrite(columnPins[c],LOW);
+		digitalWrite(columnPins[c], LOW);
 	}
 }
 

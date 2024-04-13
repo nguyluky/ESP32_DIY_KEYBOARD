@@ -25,7 +25,7 @@ typedef CustomKey Layer[COLUMNS][ROWS];
 
 namespace KC
 {
-    static const CustomKey NONE = {KeyType::KEYBOARD_KEY, (void*) &KEY_NONE}; // No key pressed
+    static const CustomKey NONE = {KeyType::KEYBOARD_KEY, NULL}; // No key pressed
     static const CustomKey ERR_OVF = {KeyType::KEYBOARD_KEY, (void*) &KEY_ERR_OVF}; //  Keyboard Error Roll Over - used for all slots if too many keys are pressed ("Phantom key")
     static const CustomKey A = {KeyType::KEYBOARD_KEY, (void*) &KEY_A}; // Keyboard a and A
     static const CustomKey B = {KeyType::KEYBOARD_KEY, (void*) &KEY_B}; // Keyboard b and B
