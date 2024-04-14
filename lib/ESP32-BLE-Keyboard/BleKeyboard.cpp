@@ -55,7 +55,7 @@ static const uint8_t _hidReportDescriptor[] = {
   REPORT_COUNT(1),    0x01,          //   REPORT_COUNT (1) ; 3 bits (Padding)
   REPORT_SIZE(1),     0x03,          //   REPORT_SIZE (3)
   HIDOUTPUT(1),       0x01,          //   OUTPUT (Const,Array,Abs,No Wrap,Linear,Preferred State,No Null Position,Non-volatile)
-  REPORT_COUNT(1),    KRO,          //   REPORT_COUNT (14) ; 14 bytes (Keys)
+  REPORT_COUNT(1),    0x06,          //   REPORT_COUNT (6) ; 6 bytes (Keys)
   REPORT_SIZE(1),     0x08,          //   REPORT_SIZE(8)
   LOGICAL_MINIMUM(1), 0x00,          //   LOGICAL_MINIMUM(0)
   LOGICAL_MAXIMUM(1), 0x65,          //   LOGICAL_MAXIMUM(0x65) ; 101 keys
@@ -338,11 +338,30 @@ uint8_t USBPutChar(uint8_t c);
 size_t BleKeyboard::press(uint8_t k)
 {
 	uint8_t i;
-	if (k >= 128) {	// it's a modifier key
+	if (k >= 136) {			// it's a non-printing key (not a modifier)
+		k = k - 136;
+	} else if (k >= 128) {	// it's a modifier key
 		_keyReport.modifiers |= (1<<(k-128));
+		k = 0;
+	} else {				// it's a printing key
+		k = pgm_read_byte(_asciimap + k);
+		if (!k) {
+			setWriteError();
+			return 0;
+		}
+		if (k & 0x80) {						// it's a capital letter or other character reached with shift
+			_keyReport.modifiers |= 0x02;	// the left shift modifier
+			k &= 0x7F;
+		}
 	}
-	else {
-		for (i=0; i<KRO; i++) {
+
+	// Add k to the key report only if it's not already present
+	// and if there is an empty slot.
+	if (_keyReport.keys[0] != k && _keyReport.keys[1] != k &&
+		_keyReport.keys[2] != k && _keyReport.keys[3] != k &&
+		_keyReport.keys[4] != k && _keyReport.keys[5] != k) {
+
+		for (i=0; i<6; i++) {
 			if (_keyReport.keys[i] == 0x00) {
 				_keyReport.keys[i] = k;
 				break;
@@ -376,19 +395,29 @@ size_t BleKeyboard::press(const MediaKeyReport k)
 size_t BleKeyboard::release(uint8_t k)
 {
 	uint8_t i;
-	if (k >= 128) {	// it's a modifier key
+	if (k >= 136) {			// it's a non-printing key (not a modifier)
+		k = k - 136;
+	} else if (k >= 128) {	// it's a modifier key
 		_keyReport.modifiers &= ~(1<<(k-128));
-	} 
-	{
-		for (i=0; i<KRO; i++) {
-			if (0 != k && _keyReport.keys[i] == k) {
-				_keyReport.keys[i] = 0x00;
-			}
+		k = 0;
+	} else {				// it's a printing key
+		k = pgm_read_byte(_asciimap + k);
+		if (!k) {
+			return 0;
+		}
+		if (k & 0x80) {							// it's a capital letter or other character reached with shift
+			_keyReport.modifiers &= ~(0x02);	// the left shift modifier
+			k &= 0x7F;
 		}
 	}
 
 	// Test the key report to see if k is present.  Clear it if it exists.
 	// Check all positions in case the key is present more than once (which it shouldn't be)
+	for (i=0; i<6; i++) {
+		if (0 != k && _keyReport.keys[i] == k) {
+			_keyReport.keys[i] = 0x00;
+		}
+	}
 
 	sendReport(&_keyReport);
 	return 1;
@@ -408,10 +437,12 @@ size_t BleKeyboard::release(const MediaKeyReport k)
 
 void BleKeyboard::releaseAll(void)
 {
-	for (u_int8_t i = 0; i < KRO; i++)
-	{
-		_keyReport.keys[i] = 0x00;
-	}
+	_keyReport.keys[0] = 0;
+	_keyReport.keys[1] = 0;
+	_keyReport.keys[2] = 0;
+	_keyReport.keys[3] = 0;
+	_keyReport.keys[4] = 0;
+	_keyReport.keys[5] = 0;
 	_keyReport.modifiers = 0;
     _mediaKeyReport[0] = 0;
     _mediaKeyReport[1] = 0;

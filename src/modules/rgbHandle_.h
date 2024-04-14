@@ -15,13 +15,12 @@ class RgbHandle
 private:
     CRGB *leds;
     int countLed;
-    rgbEffect effect = rgbEffect::WAVE;
+    rgbEffect effect = rgbEffect::RAINBOW;
     uint8_t hubOffset = 0;
     uint8_t showLeds = 0;
-    uint16_t delayTime = 200;
-    unsigned long lastTime = 0;
 public:
 
+    uint16_t delayTime = 200;
     void rainbowEffect();
     void waveEffect();
     RgbHandle(CRGB *ledBuff, uint8_t countLed);
@@ -41,9 +40,6 @@ RgbHandle::~RgbHandle()
 }
 
 void RgbHandle::update(){
-    if (millis() - lastTime < delayTime) return;
-    lastTime = millis();
-
     switch (effect)
     {
     case rgbEffect::RAINBOW:

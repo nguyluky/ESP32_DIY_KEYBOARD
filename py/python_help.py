@@ -1,7 +1,7 @@
 import json
 
 
-LAYER_FILE_PATH = "./wokwi/keyboard-layout-converted.json"
+LAYER_FILE_PATH = "./py/keyboard-layout-converted.json"
 
 def makeButtonLayout():
     with open(LAYER_FILE_PATH, encoding="UTF-8") as file:
@@ -88,7 +88,26 @@ KC::NONE, KC::NONE, KC::NONE, KC::NONE, KC::NONE, KC::LM(0), KC::NONE, KC::NONE,
         
         print("{", ','.join(lines) ,"},")
 
+
+def colorContention():
+    with open('./py/diagram-test.json', encoding="UTF-8") as file:
+        json_data: list = json.loads(file.read())
+        last_name = 'btn76:2.l'
+        for i in json_data['connections']:
+            # print(i)
+            if i[0] == last_name:
+                i[2] = 'gray'
+                # i[3][1] = 'v44.2'
+                last_name = i[1]
+                print(i)
+        # print(json_data['connections'])
+        
+        with open('./py/diagram-test1.json', 'w+',encoding="UTF-8") as file:
+            file.write(json.dumps(json_data, indent=2))
+        
+
 if __name__ == "__main__":
-    formatCenterMap()
+    # formatCenterMap()
     # makeLedConntent()
+    colorContention()
     pass

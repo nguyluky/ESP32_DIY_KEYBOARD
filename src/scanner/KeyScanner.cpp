@@ -9,34 +9,33 @@ MatrixKeyPad::MatrixKeyPad(uint8_t *colume, uint8_t *row, uint8_t columns, uint8
 
 
 	for (byte r=0; r<rows; r++) {
-		pinMode(rowPins[r],INPUT_PULLDOWN);
+		pin_mode(rowPins[r],OUTPUT);
+		pin_write(rowPins[r], LOW);
 	}
 
 	for (byte i = 0; i < columns; i++)
 	{
-		pinMode(columnPins[i], OUTPUT);
-		digitalWrite(columnPins[i], LOW);
+		pin_mode(columnPins[i], INPUT_PULLDOWN);
 	}
 	
 }
 
 void MatrixKeyPad::scanner() {
 	// Serial.println("------");
-	for (byte c=0; c<columns; c++) {
-		digitalWrite(columnPins[c], HIGH);
-		for (byte r=0; r<rows; r++) {
-			lastStatus[r][c][0] = digitalRead(rowPins[r]);
+	for (byte r=0; r<rows; r++) {
+		digitalWrite(rowPins[r], HIGH);
+		for (byte c=0; c<columns; c++) {
+			lastStatus[r][c][0] = digitalRead(columnPins[c]);
 		}
-		digitalWrite(columnPins[c], LOW);
+		digitalWrite(rowPins[r], LOW);
 	}
 }
 
 
 void MatrixKeyPad::update() {
 
-	if (millis() - lastTime <= 10) return;
+	if (millis() - lastTime < delayTime) return;
 	lastTime = millis();
-
 	this->scanner();
 
 	for (uint8_t r = 0; r < rows; r++)
