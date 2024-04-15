@@ -1,5 +1,5 @@
-#ifndef KeyBoardConfig
-#define KeyBoardConfig
+#ifndef KEY_BOARD_CONFIG_HEADER
+#define KEY_BOARD_CONFIG_HEADER
 
 #include <Arduino.h>
 
@@ -10,7 +10,7 @@
 // #define ROWS 3
 // #define COLUMNS 3
 
-#define KEYBOARD_NAME "Damaged keyboard"
+#define KEYBOARD_NAME "No keyboard"
 #define LAYERS 2
 
 #define NUM_PIXELS 87

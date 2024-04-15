@@ -23,7 +23,7 @@ private:
     uint8_t rows;
     unsigned long lastTime = 0;
 public:
-    unsigned long delayTime = 10;
+    unsigned long delayTime = 20;
     MatrixKeyPad(uint8_t *colume, uint8_t *row, uint8_t columes, uint8_t rows);
     void scanner();
     void update();
